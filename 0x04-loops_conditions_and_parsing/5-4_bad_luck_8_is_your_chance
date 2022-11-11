@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Displays "Best School" ten times
+# Displays "Best School", except at 4 and 7
+# where "bad luck" and "good luck" resp. are displayed
 
 i=0;
 while ((i < 10))
