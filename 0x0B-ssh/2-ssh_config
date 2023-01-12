@@ -1,0 +1,4 @@
+Host 75361-web-01
+  IdentityFile ~/.ssh/school
+  PasswordAuthentication no
+
