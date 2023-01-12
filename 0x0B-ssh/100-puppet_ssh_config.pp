@@ -1,4 +1,15 @@
+#Config file setup
 file { '/etc/ssh/ssh_config':
   ensure  => file,
-  content => 'Host 75361-web-01\nIdentityFile ~/.ssh/school\nPasswordAuthentication no'
+}
+
+file_line { 'No password auth':
+  path  => '/etc/ssh/ssh_config',
+  line  => 'PasswordAuthentication no',
+  match => '^PasswordAuthentication',
+}
+file_line { 'Identity file':
+  path  => '/etc/ssh/ssh_config',
+  line  => 'IdentityFile ~/.ssh/school',
+  match => '^IdentityFile',
 }
