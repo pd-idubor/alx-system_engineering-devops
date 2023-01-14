@@ -11,8 +11,10 @@ sudo chown -R "$USER:$USER" /var/www/
 echo "Hello World!" > /var/www/html/index.html
 
 #Redirection
-new="localhost;\n\tlocation \/redirect_me {\n\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n}"
-sed -i "s/localhost;/$new/" /etc/nginx/sites-available/default
+site="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+new="server_name _;\n\t return 301 $site permanent;"
+
+sudo sed -i "s/server_name _;/$new/" /etc/nginx/sites-available/default
 
 #Restart nginx
 sudo service nginx restart
