@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Nginx web server and set configurations
+
+sudo apt-get update
+sudo apt-get -y nginx
+
+#Write to index file
+echo "Hello World!" > /etc/nginx/html/index.html
+
+#Restart nginx
+sudo service nginx restart
