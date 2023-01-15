@@ -1,4 +1,5 @@
 #Config file setup
+include stdlib
 file { '/etc/ssh/ssh_config':
   ensure  => file,
 }
