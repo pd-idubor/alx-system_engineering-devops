@@ -1,11 +1,10 @@
-#Install and config nginx
+# Install and config Nginx
 include stdlib
 
-$site = 'https://www.youtube.com/watch?v=PCfiqY05BpA'
+$site= 'https://www.youtube.com/watch?v=QH2-TGUlwu4'
 $aux = "\trewrite ^/redirect_me/$ ${site} permanent;"
 
-
-exec {'Update':
+exec { 'update packages':
   command => '/usr/bin/apt-get update'
 }
 
@@ -19,21 +18,20 @@ package { 'nginx':
   require => Exec['update packages']
 }
 
-#Default page
-file {'/var/www/html/index.html':
+file { '/var/www/html/index.html':
   ensure  => 'present',
-  content => 'Hello World!'
+  content => 'Hello World!',
   mode    => '0644',
   owner   => 'root',
   group   => 'root'
 }
 
-
-#Redirection
-file_line {'Redirect':
-  path    => '/etc/nginx/sites-available/default'
-  after   => 'server_name\ _;',
-  line    => $aux,
-  notify  => Exec['restart nginx'],
-  require => File['/var/www/html/index.html']
+file_line { 'Set 301 redirection':
+  ensure   => 'present',
+  after    => 'server_name\ _;',
+  path     => '/etc/nginx/sites-available/default',
+  multiple => true,
+  line     => $aux,
+  notify   => Exec['restart nginx'],
+  require  => File['/var/www/html/index.html']
 }
