@@ -4,10 +4,10 @@
 sudo apt-get update
 sudo apt-get install -y nginx
 
+#Firewall config
+sudo ufw allow 'Nginx HTTP'
 #Ownership config
 sudo chown -R "$USER:$USER" /var/www/
-#Firewall config
-sudo ufw allow "Nginx HTTP"
 
 #Write to index file
 echo "Hello World!" > /var/www/html/index.html
@@ -20,11 +20,12 @@ new="server_name _;\n\trewrite ^/redirect_me/$ $site permanent;"
 
 sudo sed -i "s|server_name _;|$new|" /etc/nginx/sites-available/default
 
-#404 error handling
+#404 handling
 location="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
-err_4="error_page 404 /404.html;\n\t$location"
+page="error_page 404 /404.html;\n\t$location"
+err="}\n\n\t$page\t}"
 
-sudo sed -i "0,/}/ s|}|}\n\n\t$err_4\t|}" /etc/nginx/sites-available/default
+sudo sed -i "0,/}/ s|}|$err|" /etc/nginx/sites-available/default
 
 #Restart nginx
 sudo service nginx restart
