@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Nginx web server and set configurations
+
+sudo apt-get update
+sudo apt-get install -y nginx
+                                                                #Ownership config
+sudo chown -R "$USER:$USER" /var/www/
+#Firewall
+sudo ufw allow 'Nginx HTTP'
+
+#Write to index file
+echo "Hello World!" > /var/www/html/index.html
+
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+#Redirection
+site="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+new="server_name _;\n\trewrite ^/redirect_me/$ $site permanent;"
+
+sudo sed -i "s|server_name _;|$new|" /etc/nginx/sites-available/default
+
+#404 handling
+location="location = /404.html {\n\t\troot /var/www/html;\n\t\tinternal;\n"
+page="}\n\n\terror_page 404 /404.html;\n\t$location\t}"
+
+sudo sed -i "0,/}/ s|}|$page|" /etc/nginx/sites-available/default
+
+#Set headers
+head="default_server;\n\nmore_set_headers X-Served-By $HOSTNAME;"
+sudo sed -i "s|default_server;|$head|" /etc/nginx/sites-available/default
+
+sudo service nginx restart
