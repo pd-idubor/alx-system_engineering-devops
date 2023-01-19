@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#Install and configure HAproxy
+
+sudo apt-get -y update
+sudo apt-get -y upgrade 
+
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository ppa:vbernat/haproxy-2.6 -y
+
+sudo apt-get -y update
+sudo apt-get install haproxy -y
+
+cfg_file="/etc/haproxy/haproxy.cfg"
+
+#Backup config
+sudo cp $cfg_file $cfg_file.cpy
+
+#Config software
+nom="frontend http"
+port="bind *:80"
+mod="mode http"
+default="default_backend web-backend"
+front="$nom\n\t$port\n\t$mod\n\t$default\n"
+
+nom="backend web-backend"
+tech="balance roundrobin"
+server1="server 75361-web-01 54.237.29.20:80 check"
+server2="server 75361-web-02 54.236.47.104:80 check"
+back="$nom\n\t$tech\n\t$server1\n\t$server2"
+
+sudo sed -i "$ a $front" $cfg_file
+sudo sed -i "$ a $back" $cfg_file
+
+#Restart
+sudo service haproxy restart
