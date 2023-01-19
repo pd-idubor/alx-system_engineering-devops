@@ -26,7 +26,7 @@ page="}\n\n\terror_page 404 /404.html;\n\t$location\t}"
 sudo sed -i "0,/}/ s|}|$page|" /etc/nginx/sites-available/default
 
 #Set headers
-head="default_server;\n\nmore_set_headers X-Served-By $HOSTNAME;"
-sudo sed -i "s|default_server;|$head|" /etc/nginx/sites-available/default
+head="http {\n\n\tadd_header X-Served-By $HOSTNAME;"
+sudo sed -i "s|http {|$head|" /etc/nginx/nginx.conf
 
 sudo service nginx restart
