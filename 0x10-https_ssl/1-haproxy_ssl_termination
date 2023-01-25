@@ -8,6 +8,9 @@ global
 	group haproxy
 	daemon
 
+	maxconn	2048
+	tune.ssl.default-dh-param 2048
+
 	# Default SSL material locations
 	ca-base /etc/ssl/certs
 	crt-base /etc/ssl/private
@@ -22,7 +25,9 @@ defaults
 	mode	http
 	option	httplog
 	option	dontlognull
-        timeout connect 5000
+	option	forwardfor
+	option	http-server-close
+	timeout connect 5000
         timeout client  50000
         timeout server  50000
 	errorfile 400 /etc/haproxy/errors/400.http
@@ -32,22 +37,23 @@ defaults
 	errorfile 502 /etc/haproxy/errors/502.http
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
-frontend http
+
+frontend www-http
 	bind *:80
-	mode http
-	default_backend web-backend
+	http-request set-header X-Forwarded-Proto http
+	default_backend www-backend
 
 frontend www-https
-    	bind   0.0.0.0:443 ssl crt /etc/haproxy/certs/www.prdbr.tech.pem
-    	reqadd X-Forwarded-Proto:\ https
-    	acl    letsencrypt-acl path_beg /.well-known/acme-challenge/
-    	use_backend letsencrypt-backend if letsencrypt-acl
-    	default_backend www-backend
+	bind *:443 ssl crt /etc/haproxy/certs/www.prdbr.tech.pem
+	http-request set-header X-Forwarded-Proto https
+	acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+	use_backend letsencrypt-backend if letsencrypt-acl
+	default_backend www-backend
 
-backend web-backend
+backend www-backend
 	balance roundrobin
 	server 75361-web-01 54.237.29.20:80 check
 	server 75361-web-02 54.236.47.104:80 check
 
 backend letsencrypt-backend
-   	server letsencrypt 127.0.0.1:54321
+	server letsencrypt 127.0.0.1:54321
