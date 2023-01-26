@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Remove incorrect file
-cat /etc/nginx/sites-available/default > /etc/nginx/sites-enabled/default
-service nginx start
-service nginx stop
+sudo remove /etc/nginx/sites-enabled/default
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+service nginx restart
