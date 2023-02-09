@@ -10,13 +10,12 @@ if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com/users"
     user = requests.get(url)
 
-    url = "https://jsonplaceholder.typicode.com/todos"
-
-    t_list = []
     file_name = "todo_all_employees.json"
 
     for u in user.json():
+        t_list = []
         id = u.get("id")
+        url = "https://jsonplaceholder.typicode.com/todos"
         todo = requests.get(url, params={"userId": id}).json()
         name = u.get("username")
         for task in todo:
