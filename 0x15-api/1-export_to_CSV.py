@@ -21,8 +21,8 @@ if __name__ == "__main__":
         for task in todo:
             status = task.get("completed")
             title = task.get("title")
-            data = "\"{}\", \"{}\", \"{}\", \"{}\"\n".format(id,
-                                                             name,
-                                                             status,
-                                                             title)
+            data = "\"{}\",\"{}\",\"{}\",\"{}\"\n".format(id,
+                                                          name,
+                                                          status,
+                                                          title)
             fd.write(data)
