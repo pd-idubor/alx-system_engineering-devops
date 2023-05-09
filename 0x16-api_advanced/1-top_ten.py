@@ -13,6 +13,7 @@ def top_ten(subreddit):
 
     if sub.status_code != 200:
         print("None")
+        return
 
     limit = 10
     data = sub.json()["data"]["children"]
