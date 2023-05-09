@@ -17,7 +17,7 @@ def top_ten(subreddit):
     limit = 10
     data = sub.json()["data"]["children"]
     for hot in data:
-        if limit < 0:
+        if limit < 1:
             break
         print(hot["data"]["title"])
         limit -= 1
