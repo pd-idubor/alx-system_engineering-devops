@@ -24,8 +24,8 @@ front="$nom\n\t$port\n\t$mod\n\t$default\n"
 
 nom="backend web-backend"
 tech="balance roundrobin"
-server1="server 75361-web-01 54.237.29.20:80 check"
-server2="server 75361-web-02 54.236.47.104:80 check"
+server1="server 75361-web-01 54.236.46.163:80 check"
+server2="server 75361-web-02 18.206.197.243:80 check"
 back="$nom\n\t$tech\n\t$server1\n\t$server2"
 
 sudo sed -i "$ a $front" $cfg_file
