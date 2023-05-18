@@ -1,5 +1,5 @@
 [Unit]
-Description=Gunicorn app to serve full Airbnb clone html content
+Description=Configure Gunicorn to serve Airbnb content at start-up
 After=network.target
 
 [Service]
